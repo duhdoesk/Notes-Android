@@ -1,18 +1,14 @@
 package com.duhdoesk.notes.screen
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.duhdoesk.notes.components.NoteInputText
 import com.duhdoesk.notes.components.TopBar
-import com.duhdoesk.notes.R
+import com.duhdoesk.notes.components.NoteButton
 
 @Preview(showBackground = true)
 @Composable
@@ -30,6 +26,9 @@ fun HomeScreen() {
 
 @Composable
 fun NewNote() {
+    var title by remember { mutableStateOf("") }
+    var body by remember { mutableStateOf("") }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -38,32 +37,41 @@ fun NewNote() {
             .padding(12.dp)
     ) {
         NoteInputText(
-            text = "",
+            text = title,
             label = "Title",
-            onTextChange = {}
+            onTextChange = {
+                if (it.all { char ->
+                        char.isLetter() || char.isWhitespace()
+                    }) title = it
+            },
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         NoteInputText(
-            text = "",
+            text = body,
             label = "Body",
-            onTextChange = {},
-            maxLine = 3
+            onTextChange = {
+                if (it.all { char ->
+                        char.isLetter() || char.isWhitespace()
+                    }) body = it
+            },
+            maxLine = 4,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
         )
 
-        Button(
-            onClick = { },
+        NoteButton(
+            text = "Add",
+            onClick = {
+                if (title.isNotEmpty() && body.isNotEmpty()) {
+                    title = ""
+                    body = ""
+                }
+            },
             modifier = Modifier.padding(top = 12.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_add_24),
-                    contentDescription = "plus sign"
-                )
-                Text(text = "Add", Modifier.padding(start = 8.dp))
-            }
-        }
+        )
     }
 }
 

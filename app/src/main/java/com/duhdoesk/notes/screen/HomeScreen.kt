@@ -9,15 +9,24 @@ import androidx.compose.ui.unit.dp
 import com.duhdoesk.notes.components.NoteInputText
 import com.duhdoesk.notes.components.TopBar
 import com.duhdoesk.notes.components.NoteButton
+import com.duhdoesk.notes.data.Note
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        notes = emptyList(),
+        onAddNote = {},
+        onRemoveNote = {}
+    )
 }
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemoveNote: (Note) -> Unit
+) {
     Column {
         TopBar("Notes")
         NewNote()
